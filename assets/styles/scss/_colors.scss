@@ -1,0 +1,36 @@
+$dark_blue: #17233a;
+$dark_blue_accent: #33425E;
+$gold: #DE9B09;
+$brown:#DB9652;
+$dark-yellow: #896E33;
+$blue: #0953DE;
+$green: #0f5729;
+$green-accent: #309b56;
+$light-green: #9fd3b2;
+$light-brown: #F9B572;
+$light-brown-accent: #f4d4c2;
+$light-green-accent: #9fd3ca;
+$gray2: #4F4F4F;
+$light-gray: #F2F2F2;
+$purple: #9B51E0;
+$purple-accent: #dcc2f4;
+$green-20:#009e6b;
+
+$custom_theme: (
+    'light-green':$light-green,
+    'light-green-accent':$light-green-accent,
+    'light-brown-accent':$light-green-accent,
+    'purple-accent':$purple-accent,
+    'purple':$purple,
+    'green':$green,
+    'green-20':$green-20,
+    'gray2':$gray2,
+    'green-accent':$green_accent,
+    'dark-blue':$dark_blue,
+    'dark-blue-accent':$dark_blue_accent,
+    'blue':$blue,
+    'dark-yellow':$dark-yellow,
+    'light-brown':$light-brown,
+    'dark-brown':$brown,
+    'light-gray':$light-gray,
+);

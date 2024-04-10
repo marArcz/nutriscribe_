@@ -1,0 +1,97 @@
+@import './colors';
+
+.search-input {
+    position: relative;
+    &.active{
+        border: 1px solid $green-accent;
+        box-shadow: 1px 1px 5px rgba($color: $green-accent, $alpha: .7) !important;
+
+        .icon{
+            color: $green-accent !important;
+        }
+
+        
+    }
+    .icon {
+        position: absolute;
+        left: 17px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: grey;
+    }
+
+    input {
+        padding-left: 38px;
+    }
+}
+
+
+.img-icon {
+    width: 80px;
+    height: 80px;
+
+    &.sm {
+        width: 40px;
+        height: 40px;
+    }
+}
+
+
+.btn-add {
+    border: none;
+    padding: 7px 20px !important;
+    border-radius: 30px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    box-shadow: 3px 3px 5px rgb(145, 145, 145);
+
+    .text {
+        margin-left: 15px;
+    }
+
+    // @each $color, $value in $theme-colors{
+
+    // }
+}
+
+.profile-pic-div,
+.image-div {
+    width: 30px;
+    height: 30px;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-color: $gray2;
+    border-radius: 50%;
+    border: 2px solid white;
+    box-shadow: 1px 1px 5px gray;
+    $sizing: (
+        'sm':40px,
+        'md':120px,
+        'lg':150px,
+        'xl':200px,
+    );
+
+@each $size, $value in $sizing {
+    &.#{$size} {
+        width: $value;
+        height: $value;
+
+    }
+}
+
+@media screen and (max-width:1000px) {
+    &.lg {
+        width: 120px !important;
+        height: 120px !important;
+    }
+}
+
+@media screen and (max-width:768px) {
+    &.xl {
+        width: 40vw !important;
+        height: 40vw !important;
+    }
+}
+}
