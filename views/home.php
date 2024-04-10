@@ -26,7 +26,7 @@
                     <div class="card-header border-0 p-0 position-relative">
                         <img src="../assets/images/card-header-bg.png" class="w-100" alt="">
                         <div class="user-card__name">
-                            <p class="my-1 fw-medium fs-5">
+                            <p class="my-1 fw-medium fs-5 text-truncate">
                                 <?= $user['firstname'] ?> <?= $user['middlename'] ?> <?= $user['lastname'] ?>
                             </p>
                         </div>

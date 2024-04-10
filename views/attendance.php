@@ -45,7 +45,7 @@ require '../app/add_attendance.php';
                                 <p class="text-dark-brown fw-medium"><?= date('F d, Y') ?></p>
                             </div>
                         </div>
-                        <p class="mt-3 fs-5 fw-medium text-gray2">
+                        <p class="mt-3 fs-5 fw-normal text-gray2">
                             Welcome, you can submit your attendance by selecting an action and submitting the form.
                         </p>
                         <br><br>

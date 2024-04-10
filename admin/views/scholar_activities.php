@@ -33,13 +33,20 @@
                                 </div>
                             </form>
                         </div>
-                        <div class="col-auto ms-auto">
+                        <!-- filter form -->
+                        <!-- <div class="col-auto ms-auto">
                             <form action="" method="get">
                                 <div class="text-end">
-                                    <button type="button" data-bs-toggle="collapse" data-bs-target="#filter-group" class="btn btn-secondary">
-                                        <i class="bx bx-filter "></i>
-                                        <span class="fw-medium">Filter</span>
-                                    </button>
+                                    <div class="d-flex flex-wrap align-items-center gap-2">
+                                        <div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value="" id="show-submitted">
+                                                <label class="form-check-label" for="flexCheckDefault">
+                                                    Default checkbox
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class=" mb-4 collapse  border-0 mt-2 <?= isset($_GET['filter']) ? 'show' : '' ?>" id="filter-group">
                                     <div class="">
@@ -59,7 +66,7 @@
                                     </div>
                                 </div>
                             </form>
-                        </div>
+                        </div> -->
                     </div>
                     <?php if (isset($_GET['search'])) : ?>
                         <a href="?" class="btn btn-secondary mt-3">

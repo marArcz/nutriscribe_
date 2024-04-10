@@ -32,16 +32,16 @@ foreach ($time_ins as $key => $time_in) {
 }
 
 // get scholars with no time in yet
-$query = $pdo->prepare("SELECT * FROM scholar_infos WHERE id NOT IN (SELECT scholar_id FROM attendances WHERE DATE(created_at) = DATE(NOW()) AND type = 'in')");
-$query->execute();
-while ($row = $query->fetch()) {
-    $scholar['name'] = $row['firstname'] . ' ' . $row['lastname'];
-    $scholar['scholar_id'] = $row['id'];
-    $scholar['photo'] = $row['photo'];
-    $scholar['time_in'] = null;
-    $scholar['time_out'] = null;
-    array_push($scholars, $scholar);
-}
+// $query = $pdo->prepare("SELECT * FROM scholar_infos WHERE id NOT IN (SELECT scholar_id FROM attendances WHERE DATE(created_at) = DATE(NOW()) AND type = 'in')");
+// $query->execute();
+// while ($row = $query->fetch()) {
+//     $scholar['name'] = $row['firstname'] . ' ' . $row['lastname'];
+//     $scholar['scholar_id'] = $row['id'];
+//     $scholar['photo'] = $row['photo'];
+//     $scholar['time_in'] = null;
+//     $scholar['time_out'] = null;
+//     array_push($scholars, $scholar);
+// }
 
 
 echo json_encode($scholars);

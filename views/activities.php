@@ -94,7 +94,7 @@ $rows = $query->fetchAll(PDO::FETCH_ASSOC);
                 <table class="table table-hover mb-0 align-middle" id="activities-table">
                     <thead class="table-light">
                         <tr class="">
-                            
+
                             <th class="fw-medium">Project / Task</th>
                             <th class="fw-medium">Date</th>
                             <th class="fw-medium">Location</th>
@@ -116,7 +116,7 @@ $rows = $query->fetchAll(PDO::FETCH_ASSOC);
                                     <th><?= substring($row['beneficiaries']) ?></th>
                                     <th><?= date('M d, Y', strtotime($row['created_at'])) ?></th>
                                     <th>
-                                        <span class="badge fw-medium bg-<?= $row['status'] == 'SUBMITTED'? 'dark-brown':'green-accent' ?>"><?= $row['status'] ?></span>
+                                        <span class="badge fw-medium bg-<?= $row['status'] == 'SUBMITTED' ? 'dark-brown' : 'green-accent' ?>"><?= $row['status'] ?></span>
                                     </th>
                                     <th>
                                         <div class="dropdown">
@@ -126,7 +126,13 @@ $rows = $query->fetchAll(PDO::FETCH_ASSOC);
 
                                             <ul class="dropdown-menu">
                                                 <li><a class="dropdown-item" href="view_activity.php?id=<?= $row['id'] ?>">View</a></li>
-                                                <li><a class="dropdown-item" href="edit_activity.php?id=<?= $row['id'] ?>">Edit</a></li>
+                                                <li>
+                                                    <?php if($row['status'] == 'SUBMITTED'): ?>
+                                                        <a class="dropdown-item" href="edit_activity.php?id=<?= $row['id'] ?>">Edit</a>
+                                                    <?php else: ?>
+                                                        <a class="dropdown-item disabled" title="Cannot be edited anymore." href="edit_activity.php">Edit</a>
+                                                    <?php endif; ?>
+                                                </li>
                                                 <li><a class="dropdown-item" href="delete_activity.php?id=<?= $row['id'] ?>">Delete</a></li>
                                             </ul>
                                         </div>

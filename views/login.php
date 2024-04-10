@@ -62,7 +62,7 @@ if (Session::getUser($pdo)) {
                             <label class="text-light ms-2" for="remember-me">Remember me</span>
                         </div>
                         <br>
-                        <div class="mt-4 mb-2 d-grid">
+                        <div class="mt-4 mb-4 d-grid">
                             <button type="submit" name="login" class="btn btn-light fs-5 rounded text-dark">Sign In</button>
                         </div>
                     </form>
