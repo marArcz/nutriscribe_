@@ -9,7 +9,7 @@ jobs:
       uses: actions/checkout@v4
 
     - name: Use NPM INSTALL ACTION
-      uses: bahmutov/npm-install@v1
+      uses: actions/setup-node@v2
       
     - name: Use Composer
       uses: php-actions/composer@v6
@@ -17,8 +17,9 @@ jobs:
     - name: 🔨 Install Composer Packages
       run: composer install
       
-    - name: 🔨 Install NPM Package
-      run: npm install
+    - name: 🔨 Build Project
+      run: |
+        npm install
     
     
     - name: 📂 Sync files
