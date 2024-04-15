@@ -2,16 +2,18 @@
 
 .search-input {
     position: relative;
-    &.active{
+
+    &.active {
         border: 1px solid $green-accent;
         box-shadow: 1px 1px 5px rgba($color: $green-accent, $alpha: .7) !important;
 
-        .icon{
+        .icon {
             color: $green-accent !important;
         }
 
-        
+
     }
+
     .icon {
         position: absolute;
         left: 17px;
@@ -53,6 +55,60 @@
     // @each $color, $value in $theme-colors{
 
     // }
+}
+
+// tab-list-component
+.tab-list {
+    li.all {
+        .badge {
+            // border: 1px solid gray;
+            background: rgb(230, 230, 230) !important;
+            color: $gray2 !important;
+        }
+
+        &.active {
+            a {
+                span {
+                    font-weight: 400 !important;
+                }
+                border-bottom: 3px solid rgb(83, 83, 83) !important;
+            }
+        }
+    }
+
+    li.submitted {
+        .badge {
+            // border: 1px solid gray;
+            background: $brown !important;
+            color: white !important;
+        }
+
+        &.active {
+            a {
+                span {
+                    font-weight: 400 !important;
+                }
+                border-bottom: 3px solid $brown !important;
+            }
+        }
+    }
+
+    li.recieved {
+        .badge {
+            // border: 1px solid gray;
+            background: $green-accent !important;
+            color: white !important;
+        }
+
+        &.active {
+            a {
+                span {
+                    font-weight: 400 !important;
+                }
+                border-bottom: 3px solid $green-accent !important;
+            }
+        }
+    }
 }
 
 .profile-pic-div,

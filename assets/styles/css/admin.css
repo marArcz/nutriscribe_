@@ -130,7 +130,7 @@ body {
 }
 
 .sidebar-overlay-sm {
-  position: absolute;
+  position: fixed;
   width: 100%;
   height: 100%;
   background: rgba(0, 0, 0, 0.3);
@@ -184,6 +184,11 @@ main .content {
   align-items: center;
   border-radius: 50%;
   font-size: 0.8rem;
+}
+.text-profile-pic.lg {
+  width: 120px !important;
+  height: 120px !important;
+  font-size: 1.7rem !important;
 }
 
 .table .table-header {
@@ -252,8 +257,48 @@ main .content {
 }
 
 .dashboard .attendance-wrapper {
-  min-height: 40vh !important;
+  min-height: 20vh !important;
   max-height: 60vh !important;
   overflow-x: hidden !important;
   overflow-y: auto !important;
+}
+
+.edit-profile-photo-group {
+  width: -moz-max-content;
+  width: max-content;
+  margin-bottom: 25px;
+}
+.edit-profile-photo-group .wrapper {
+  position: relative;
+}
+.edit-profile-photo-group .wrapper .camera-btn {
+  width: 40px;
+  height: 40px;
+  background: #4F4F4F;
+  border-radius: 50%;
+  border: 1px solid white;
+  box-shadow: 1px 1px 3px gray;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  right: 0px;
+  bottom: 0px;
+  opacity: 0.8;
+  transition: 200ms;
+  cursor: pointer;
+}
+.edit-profile-photo-group .wrapper .camera-btn * {
+  cursor: pointer;
+}
+.edit-profile-photo-group .wrapper .camera-btn:hover {
+  opacity: 1;
+}
+.edit-profile-photo-group .wrapper .camera-btn i {
+  color: white !important;
+}
+
+.table-item.dropdown {
+  width: -moz-fit-content !important;
+  width: fit-content !important;
 }/*# sourceMappingURL=admin.css.map */

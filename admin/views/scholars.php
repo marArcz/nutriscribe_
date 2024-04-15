@@ -92,7 +92,7 @@ if (isset($_GET['search'])) {
                         </thead>
                         <tbody>
                             <?php
-                            $query = $pdo->prepare("SELECT scholar_infos.*,scholar_accounts.username FROM scholar_infos INNER JOIN scholar_accounts ON scholar_infos.scholar_account_id = scholar_accounts.id");
+                            $query = $pdo->prepare("SELECT scholar_infos.*,scholar_accounts.username FROM scholar_infos INNER JOIN scholar_accounts ON scholar_infos.scholar_account_id = scholar_accounts.id ORDER BY id DESC");
                             $query->execute();
 
                             foreach ($rows as $row) {
@@ -127,7 +127,6 @@ if (isset($_GET['search'])) {
                     <div class="table-pagination bg-light py-2">
                         <div class="d-flex align-items-center">
                             <div class="ps-3">
-
                                 <p class=" align-self-center text-secondary my-2 ">
                                     Showing <?= $starting_row + 1 ?> to <?= $starting_row + count($rows) ?> of <?= $total_rows ?> entries.
                                 </p>

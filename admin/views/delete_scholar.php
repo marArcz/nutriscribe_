@@ -2,7 +2,7 @@
 <?php
 require '../app/delete_scholar.php';
 
-if(!isset($_GET['id'])){
+if (!isset($_GET['id'])) {
     Session::redirectTo('scholars.php');
     exit;
 }
@@ -14,7 +14,7 @@ $query->execute([$id]);
 
 $user_info = $query->fetch();
 
-if(!$user_info){
+if (!$user_info) {
     Session::redirectTo("scholars.php");
     exit;
 }
@@ -40,21 +40,30 @@ if(!$user_info){
         <?php require_once '../includes/navbar.php' ?>
         <div class="content">
             <div class="container-fluid-sm">
-                <div class="d-flex mb-4">
-                    <h6 class="text-dark">BN Scholars</h6>
+                <div class="d-flex mb-4 gap-2 align-items-center">
+                    <p class="text-dark fw-medium">BN Scholars</p>
+                    <p class="text-dark fw-medium">
+                        <span class="bx bx-chevron-right"></span>
+                    </p>
+                    <p class="text-dark fw-medium">Delete</p>
                 </div>
-                <div class="mt-3">
-                    <form method="post">
-                        <input type="hidden" name="id" value="<?= $_GET['id'] ?>">
-                        <h4 class="text-danger">Do you really want to delete this BN Scholar?</h3>
-                        <h5 class="mb-4"><?= $user_info['firstname'] . (empty($user_info['middlename']) ? '' : ' ' . $user_info['middlename']) . ' ' . $user_info['lastname'] ?></h5>
-                        <div class="mt-3">
-                            <div class="d-flex gap-2">
-                                <button class="btn btn-danger" type="submit">Yes</button>
-                                <a href="scholars.php" class="btn btn-dark">Cancel</a>
-                            </div>
+                <div class="col-md-6 mx-auto mt-4">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body p-4">
+                            <form action="" method="post">
+                                <input type="hidden" name="id" value="<?= $_GET['id'] ?>">
+                                <div class="mb-3">
+                                    <p for="" class="mb-1 text-secondary fw-medium">Confirm Action</p>
+                                    <p for="" class="mb-3 fs-5 text-dark fw-medium">Are you sure to delete this user?</p>
+                                    <input type="text" readonly value="<?= $user_info['firstname'] . (empty($user_info['middlename']) ? '' : ' ' . $user_info['middlename']) . ' ' . $user_info['lastname'] ?>" class="form-control text-green fw-medium fs-5" name="title" required>
+                                </div>
+                                <div class="mt-5 d-flex gap-3">
+                                    <a href="javascript:history.go(-1)" class="btn btn-light-dark text-light fw-medium col mx-auto">Cancel</a>
+                                    <button class="btn btn-secondary text-light fw-medium col mx-auto" name="submit" type="submit">Confirm</button>
+                                </div>
+                            </form>
                         </div>
-                    </form>
+                    </div>
                 </div>
             </div>
         </div>

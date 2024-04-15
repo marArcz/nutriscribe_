@@ -24,24 +24,38 @@
             <div class="container-fluid-sm">
                 <div class="mb-2">
                     <p class="text-secondary fs-6 fw-medium">BN Scholar Attendance</p>
-
-                    <form action="" method="get">
-                        <div class="text-end">
-                            <button type="button" data-bs-toggle="collapse" data-bs-target="#filter-group" class="btn btn-secondary">
-                                <i class="bx bx-filter "></i>
-                                <span class="fw-medium">Filter</span>
-                            </button>
+                    <div class="d-flex justify-content-between mt-5 flex-wrap">
+                        <div class="">
+                            <form action="" method="get">
+                                <div class="search-input rounded-3 <?= isset($_GET['search']) ? 'active' : '' ?>">
+                                    <i class="icon bx bx-search"></i>
+                                    <input type="search" value="<?= isset($_GET['search']) ? $_GET['search'] : '' ?>" name="search" placeholder="Search" class="rounded-3 form-control">
+                                </div>
+                            </form>
                         </div>
-                        <div class=" mb-4 collapse  border-0 mt-2 <?= isset($_GET['filter'])? 'show':'' ?>" id="filter-group">
+                        <div>
+                            <div class="text-end">
+                                <button type="button" data-bs-toggle="collapse" data-bs-target="#filter-group" class="btn btn-secondary">
+                                    <i class="bx bx-filter "></i>
+                                    <span class="fw-medium">Filter</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="filter-form mt-3 mb-3">
+                    <form action="" method="get">
+                        <div class=" mb-4 collapse border-0 mt-2 <?= isset($_GET['filter']) ? 'show' : '' ?>" id="filter-group">
                             <div class="">
                                 <div class="row g-3">
                                     <div class="col-md">
                                         <label for="" class="form-label text-gray2 fw-normal">Starting Date:</label>
-                                        <input type="date" value="<?= isset($_GET['start_date']) ? $_GET['start_date']:'' ?>" name="start_date" class="form-control">
+                                        <input type="date" value="<?= isset($_GET['start_date']) ? $_GET['start_date'] : '' ?>" name="start_date" class="form-control">
                                     </div>
                                     <div class="col-md">
                                         <label for="" class="form-label text-gray2 fw-normal">End Date:</label>
-                                        <input type="date" value="<?= isset($_GET['end_date']) ? $_GET['end_date']:'' ?>" name="end_date" class="form-control">
+                                        <input type="date" value="<?= isset($_GET['end_date']) ? $_GET['end_date'] : '' ?>" name="end_date" class="form-control">
                                     </div>
                                     <div class="col-md-auto align-self-end">
                                         <button class="btn btn-green-accent" name="filter" type="submit">Go</button>
@@ -68,7 +82,20 @@
                     $query->execute([$start_date, $end_date]);
 
                     $rows = $query->fetchAll();
-                } else {
+                } 
+                else if(isset($_GET['search'])){
+                    $search_str = $_GET['search'];
+                    $search_query = "attendances.type LIKE :search OR attendances.created_at LIKE :search OR scholar_infos.firstname LIKE :search OR scholar_infos.middlename LIKE :search OR scholar_infos.lastname LIKE :search";
+                    //get total rows
+                    $query = $pdo->prepare("SELECT attendances.*, scholar_infos.firstname,scholar_infos.middlename,scholar_infos.lastname FROM attendances INNER JOIN scholar_infos ON attendances.scholar_id = scholar_infos.id WHERE $search_query");
+                    $query->execute([":search"=>"$search_str"]);
+                    $total_rows = $query->rowCount();
+                    $total_pages = ceil($total_rows / $rows_per_page);
+                    $query = $pdo->prepare("SELECT attendances.*, scholar_infos.firstname,scholar_infos.middlename,scholar_infos.lastname FROM attendances INNER JOIN scholar_infos ON attendances.scholar_id = scholar_infos.id WHERE $search_query ORDER BY attendances.created_at DESC, attendances.type ASC LIMIT $rows_per_page OFFSET $starting_row");
+                    $query->execute([":search"=>"$search_str"]);
+                    $rows = $query->fetchAll();
+                }
+                else {
                     $query = $pdo->prepare("SELECT id FROM attendances");
                     $query->execute();
                     $total_rows = $query->rowCount();
@@ -78,7 +105,7 @@
                     $rows = $query->fetchAll();
                 }
                 ?>
-                <div class="table-responsive-sm">
+                <div class="table-responsive-sm mt-3">
                     <table class="table table-hover mb-0">
                         <thead class="table-light">
                             <tr>
@@ -86,20 +113,18 @@
                                 <th class="fw-medium text-dark py-3">Type</th>
                                 <th class="fw-medium text-dark py-3">Time</th>
                                 <th class="fw-medium text-dark py-3">Date</th>
-                                <th class="fw-medium text-dark py-3">Action</th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php foreach ($rows as $key => $row) : ?>
                                 <tr>
-                                    <td class="py-2"><?= $row['firstname'] . ' ' . $row['lastname'] ?></td>
-                                    <td class="py-2"><?= strtoupper($row['type']) ?></td>
-                                    <td class="py-2"><?= date('h:i A', strtotime($row['time'])) ?></td>
-                                    <td class="py-2"><?= date('M d, Y', strtotime($row['time'])) ?></td>
-                                    <td></td>
+                                    <td class="py-3"><?= $row['firstname'] . ' ' . $row['lastname'] ?></td>
+                                    <td class="py-3"><?= strtoupper($row['type']) ?></td>
+                                    <td class="py-3"><?= date('h:i A', strtotime($row['time'])) ?></td>
+                                    <td class="py-3"><?= date('M d, Y', strtotime($row['time'])) ?></td>
                                 </tr>
                             <?php endforeach ?>
-                            <?php if(count($rows) == 0): ?>
+                            <?php if (count($rows) == 0) : ?>
                                 <tr>
                                     <td colspan="5" class="text-center">Nothing to show.</td>
                                 </tr>

@@ -36,7 +36,7 @@ if(isset($_POST['submit'])){
         $query = $pdo->prepare('UPDATE scholar_infos SET firstname = ?,middlename=?,lastname=?,address=?,phone=?,email=? WHERE scholar_account_id = ?');
         $query->execute([$firstname,$middlename,$lastname,$address,$phone,$email,$id]);
 
-        Session::insertSuccess("Successfully update scholar!");
+        Session::insertSuccess("Successfully updated scholar!");
         Session::redirectTo('scholars.php');
         exit;
     }

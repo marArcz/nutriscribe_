@@ -38,11 +38,16 @@ $activity = $query->fetch();
                     <p class="text-secondary fs-6 fw-medium mb-1">BN Scholar Activities</p>
                     <p class="text-green-accent mb-0 mt-1 fw-medium">View Activity</p>
                 </div>
-                <div class="text-end">
-                    <button class="d-flex align-items-center gap-2 ms-auto btn btn-dark-brown mb-3 rounded-3 px-3 fw-normal text-light" type="button">
+                <div class="text-end d-flex">
+                    <!-- <button class="d-flex align-items-center gap-2 ms-auto btn btn-dark-brown mb-3 rounded-3 px-3 fw-normal text-light" type="button">
                         <span>Update Status</span>
                         <i class="bx bx-edit"></i>
-                    </button>
+                    </button> -->
+                    <a href="javascript:history.go(-1)" class="btn-add rounded-pill shadow-sm  btn btn-light-dark ms-auto mb-3">
+                        <i class="icon bx bx-x"></i>
+                        <span class="text fs-6 fw-medium">Close</span>
+                    </a>
+
                 </div>
                 <div class="card shadow-sm rounded-2 border">
                     <div class="card-body p-4">

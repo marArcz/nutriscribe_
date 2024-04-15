@@ -1,6 +1,8 @@
 <?php require_once '../includes/authenticated.php' ?>
 <?php
+$page_query_param = $_GET;
 
+// function updateQueryParam()
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -26,47 +28,13 @@
                     <p class="text-secondary fs-6 fw-medium">BN Scholar Activities</p>
                     <div class="row gy-3">
                         <div class="col-md-4 col-12">
-                            <form action="" method="get">
+                            <form action="<?= $_SERVER['PHP_SELF'] . '?' . http_build_query($page_query_param) ?>" method="get">
                                 <div class="search-input rounded-3 <?= isset($_GET['search']) ? 'active' : '' ?>">
                                     <i class="icon bx bx-search"></i>
                                     <input type="search" value="<?= isset($_GET['search']) ? $_GET['search'] : '' ?>" name="search" placeholder="Search" class="rounded-3 form-control">
                                 </div>
                             </form>
                         </div>
-                        <!-- filter form -->
-                        <!-- <div class="col-auto ms-auto">
-                            <form action="" method="get">
-                                <div class="text-end">
-                                    <div class="d-flex flex-wrap align-items-center gap-2">
-                                        <div>
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" value="" id="show-submitted">
-                                                <label class="form-check-label" for="flexCheckDefault">
-                                                    Default checkbox
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class=" mb-4 collapse  border-0 mt-2 <?= isset($_GET['filter']) ? 'show' : '' ?>" id="filter-group">
-                                    <div class="">
-                                        <div class="row g-3">
-                                            <div class="col-md">
-                                                <label for="" class="form-label text-gray2 fw-normal">Starting Date:</label>
-                                                <input type="date" value="<?= isset($_GET['start_date']) ? $_GET['start_date'] : '' ?>" name="start_date" class="form-control">
-                                            </div>
-                                            <div class="col-md">
-                                                <label for="" class="form-label text-gray2 fw-normal">End Date:</label>
-                                                <input type="date" value="<?= isset($_GET['end_date']) ? $_GET['end_date'] : '' ?>" name="end_date" class="form-control">
-                                            </div>
-                                            <div class="col-md-auto align-self-end">
-                                                <button class="btn btn-green-accent" name="filter" type="submit">Go</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
-                        </div> -->
                     </div>
                     <?php if (isset($_GET['search'])) : ?>
                         <a href="?" class="btn btn-secondary mt-3">
@@ -76,31 +44,114 @@
                         </a>
                     <?php endif ?>
                 </div>
+
+                <!-- tab filter -->
+                <ul class="nav flex-row mb-4 tab-list">
+                    <?php
+                    if (isset($_GET['search'])) {
+                        $search_str = $_GET['search'];
+                        $search_query = "(DATE(scholar_activities.created_at) LIKE :search || scholar_infos.firstname LIKE :search || scholar_infos.middlename LIKE :search || scholar_infos.lastname LIKE :search || CONCAT(scholar_infos.firstname,' ',scholar_infos.lastname) LIKE :search || scholar_activities.title LIKE :search || scholar_activities.location LIKE :search || scholar_activities.beneficiaries LIKE :search || scholar_activities.type LIKE :search) AND scholar_activities.status = :status";
+                        $query = $pdo->prepare("SELECT count(scholar_activities.id) FROM scholar_activities INNER JOIN scholar_infos ON scholar_activities.scholar_id = scholar_infos.id WHERE $search_query");
+                        $query->execute([':search' => "%$search_str%", ':status' => "SUBMITTED"]);
+                        $submitted = $query->fetch()[0];
+                        $query->execute([':search' => "%$search_str%", ':status' => "RECIEVED"]);
+                        $recieved = $query->fetch()[0];
+
+                        // get all
+                        $search_query = "DATE(scholar_activities.created_at) LIKE :search || scholar_infos.firstname LIKE :search || scholar_infos.middlename LIKE :search || scholar_infos.lastname LIKE :search || CONCAT(scholar_infos.firstname,' ',scholar_infos.lastname) LIKE :search || scholar_activities.title LIKE :search || scholar_activities.location LIKE :search || scholar_activities.beneficiaries LIKE :search || scholar_activities.type LIKE :search";
+                        $query = $pdo->prepare("SELECT count(scholar_activities.id) FROM scholar_activities INNER JOIN scholar_infos ON scholar_activities.scholar_id = scholar_infos.id WHERE $search_query");
+                        $query->execute([':search' => "%$search_str%"]);
+                        $total = $query->fetch()[0];
+                    } else {
+                        $query = $pdo->prepare("SELECT count(id) FROM scholar_activities WHERE status = ?");
+                        $query->execute(["SUBMITTED"]);
+                        $submitted = $query->fetch()[0];
+                        $query->execute(["RECIEVED"]);
+                        $recieved = $query->fetch()[0];
+
+                        // get all
+                        $query = $pdo->prepare("SELECT count(id) FROM scholar_activities");
+                        $query->execute();
+                        $total = $query->fetch()[0];
+                    }
+
+                    $tabs = [
+                        ['All', $total],
+                        ['Submitted', $submitted],
+                        ['Recieved', $recieved],
+                    ];
+
+                    ?>
+                    <?php
+                    foreach ($tabs as $index => $tab) :
+                        $params = $page_query_param;
+                        $params['page'] = 1;
+                        if ($index == 0) {
+                            unset($params['status']);
+                        } else {
+                            $params['status'] = strtoupper($tab[0]);
+                        }
+                    ?>
+                        <li class="nav-item <?= strtolower($tab[0]) ?> <?= !isset($_GET['status']) && $index == 0 ? 'active' : (isset($_GET['status']) && $_GET['status'] == strtoupper($tab[0]) ? 'active' : '') ?>">
+                            <a href="?<?= http_build_query($params) ?>" class="d-flex px-3 py-2 text-dark align-items-center gap-3 text-decoration-none">
+                                <span><?= $tab[0] ?></span>
+                                <span class="badge fw-medium"><?= $tab[1] ?></span>
+                            </a>
+                        </li>
+                    <?php endforeach ?>
+                </ul>
                 <?php
                 $page = isset($_GET['page']) ? $_GET['page'] : 1;
                 $rows_per_page = 10;
                 $starting_row = ($page - 1) * $rows_per_page;
 
                 if (isset($_GET['search'])) {
-
-                    $query = $pdo->prepare("SELECT scholar_activities.id FROM scholar_activities INNER JOIN scholar_infos ON scholar_activities.scholar_id = scholar_infos.id");
-                    $query->execute();
-                    $total_rows = $query->rowCount();
-                    $total_pages = ceil($total_rows / $rows_per_page);
-                    $search_query = "scholar_infos.firstname LIKE :search || scholar_infos.middlename LIKE :search || scholar_infos.lastname LIKE :search || CONCAT(scholar_infos.firstname,' ',scholar_infos.lastname) LIKE :search || scholar_activities.title LIKE :search || scholar_activities.location LIKE :search || scholar_activities.beneficiaries LIKE :search || scholar_activities.type LIKE :search";
-                    $query = $pdo->prepare("SELECT scholar_activities.*, scholar_infos.firstname,scholar_infos.middlename,scholar_infos.lastname FROM scholar_activities INNER JOIN scholar_infos ON scholar_activities.scholar_id = scholar_infos.id WHERE $search_query LIMIT $rows_per_page OFFSET $starting_row");
                     $search_str = $_GET['search'];
-                    $query->execute([':search' => "%$search_str%"]);
+                    if (isset($_GET['status'])) {
+                        $status = $_GET['status'];
+                        $search_query = "(DATE(scholar_activities.created_at) LIKE :search || scholar_infos.firstname LIKE :search || scholar_infos.middlename LIKE :search || scholar_infos.lastname LIKE :search || CONCAT(scholar_infos.firstname,' ',scholar_infos.lastname) LIKE :search || scholar_activities.title LIKE :search || scholar_activities.location LIKE :search || scholar_activities.beneficiaries LIKE :search || scholar_activities.type LIKE :search) AND status = :status";
+                        // get total rows
+                        $query = $pdo->prepare("SELECT scholar_activities.id FROM scholar_activities INNER JOIN scholar_infos ON scholar_activities.scholar_id = scholar_infos.id WHERE $search_query");
+                        $query->execute([':search' => "%$search_str%", ':status' => $status]);
+                        $total_rows = $query->rowCount();
+                        $total_pages = ceil($total_rows / $rows_per_page);
+                        // get data
+                        $query = $pdo->prepare("SELECT scholar_activities.*, scholar_infos.firstname,scholar_infos.middlename,scholar_infos.lastname FROM scholar_activities INNER JOIN scholar_infos ON scholar_activities.scholar_id = scholar_infos.id WHERE $search_query LIMIT $rows_per_page OFFSET $starting_row");
+                        $query->execute([':search' => "%$search_str%", ':status' => $status]);
+                    } else {
+                        $search_query = "DATE(scholar_activities.created_at) LIKE :search || scholar_infos.firstname LIKE :search || scholar_infos.middlename LIKE :search || scholar_infos.lastname LIKE :search || CONCAT(scholar_infos.firstname,' ',scholar_infos.lastname) LIKE :search || scholar_activities.title LIKE :search || scholar_activities.location LIKE :search || scholar_activities.beneficiaries LIKE :search || scholar_activities.type LIKE :search";
+                        $search_str = $_GET['search'];
+                        // get total rows
+                        $query = $pdo->prepare("SELECT scholar_activities.id FROM scholar_activities INNER JOIN scholar_infos ON scholar_activities.scholar_id = scholar_infos.id WHERE $search_query");
+                        $query->execute([':search' => "%$search_str%"]);
+                        $total_rows = $query->rowCount();
+                        $total_pages = ceil($total_rows / $rows_per_page);
+                        // get data
+                        $query = $pdo->prepare("SELECT scholar_activities.*, scholar_infos.firstname,scholar_infos.middlename,scholar_infos.lastname FROM scholar_activities INNER JOIN scholar_infos ON scholar_activities.scholar_id = scholar_infos.id WHERE $search_query LIMIT $rows_per_page OFFSET $starting_row");
+                        $query->execute([':search' => "%$search_str%"]);
+                    }
 
                     $rows = $query->fetchAll();
                 } else {
-                    $query = $pdo->prepare("SELECT scholar_activities.id FROM scholar_activities INNER JOIN scholar_infos ON scholar_activities.scholar_id = scholar_infos.id");
-                    $query->execute();
-                    $total_rows = $query->rowCount();
-                    $total_pages = ceil($total_rows / $rows_per_page);
-                    $query = $pdo->prepare("SELECT scholar_activities.*, scholar_infos.firstname,scholar_infos.middlename,scholar_infos.lastname FROM scholar_activities INNER JOIN scholar_infos ON scholar_infos.id = scholar_activities.scholar_id LIMIT $rows_per_page OFFSET $starting_row");
-                    $query->execute();
-                    $rows = $query->fetchAll();
+                    if (isset($_GET['status'])) {
+                        $query = $pdo->prepare("SELECT scholar_activities.id FROM scholar_activities INNER JOIN scholar_infos ON scholar_activities.scholar_id = scholar_infos.id WHERE scholar_activities.status = ?");
+                        $query->execute([$_GET['status']]);
+
+                        $total_rows = $query->rowCount();
+                        $total_pages = ceil($total_rows / $rows_per_page);
+                        $query = $pdo->prepare("SELECT scholar_activities.*, scholar_infos.firstname,scholar_infos.middlename,scholar_infos.lastname FROM scholar_activities INNER JOIN scholar_infos ON scholar_infos.id = scholar_activities.scholar_id WHERE scholar_activities.status = ? LIMIT $rows_per_page OFFSET $starting_row");
+                        $query->execute([$_GET['status']]);
+                        $rows = $query->fetchAll();
+                    } else {
+                        $query = $pdo->prepare("SELECT scholar_activities.id FROM scholar_activities INNER JOIN scholar_infos ON scholar_activities.scholar_id = scholar_infos.id");
+                        $query->execute();
+
+                        $total_rows = $query->rowCount();
+                        $total_pages = ceil($total_rows / $rows_per_page);
+                        $query = $pdo->prepare("SELECT scholar_activities.*, scholar_infos.firstname,scholar_infos.middlename,scholar_infos.lastname FROM scholar_activities INNER JOIN scholar_infos ON scholar_infos.id = scholar_activities.scholar_id LIMIT $rows_per_page OFFSET $starting_row");
+                        $query->execute();
+                        $rows = $query->fetchAll();
+                    }
                 }
                 ?>
                 <div class="table-responsive-sm">
@@ -124,7 +175,7 @@
                                     <td class="py-2"><?= $row['location'] ?></td>
                                     <td class="py-2">
                                         <!-- <span class="badge bg-<?= $row['status'] == 'SUBMITTED' ? 'dark-brown' : 'green-accent' ?>"><?= $row['status'][0] . strtolower(substr($row['status'], 1)) ?></span> -->
-                                        <div class="dropdown">
+                                        <div class="dropdown table-item">
                                             <a class="btn d-flex align-items-center gap-1 btn-sm btn-<?= $row['status'] == 'SUBMITTED' ? 'dark-brown text-light' : 'green-accent' ?>" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                                 <span><?= $row['status'][0] . strtolower(substr($row['status'], 1)) ?></span>
                                                 <i class="bx bx-chevron-down"></i>
@@ -165,11 +216,13 @@
                                 </p>
                             </div>
                             <div class="ms-auto d-flex gap-3 align-items-center">
-                                <a href="?page=<?= $page - 1 ?>" class="<?= ($page - 1) <= 0 ? 'disabled border-0' : '' ?> d-flex align-items-center btn text-btn-green-accent fw-medium">
+                                <?php
+                                ?>
+                                <a href="?<?= http_build_query(array_merge($page_query_param, ['page' => $page - 1])) ?>" class="<?= ($page - 1) <= 0 ? 'disabled border-0' : '' ?> d-flex align-items-center btn text-btn-green-accent fw-medium">
                                     <i class="bx bx-skip-previous"></i>
                                     Prev
                                 </a>
-                                <a href="?page=<?= $page + 1 ?>" class="<?= ($page + 1) > $total_pages ? 'disabled border-0' : '' ?> d-flex align-items-center btn text-btn-green-accent fw-medium">
+                                <a href="?<?= http_build_query(array_merge($page_query_param, ['page' => $page + 1])) ?>" class="<?= ($page + 1) > $total_pages ? 'disabled border-0' : '' ?> d-flex align-items-center btn text-btn-green-accent fw-medium">
                                     Next
                                     <i class="bx bx-skip-next"></i>
                                 </a>

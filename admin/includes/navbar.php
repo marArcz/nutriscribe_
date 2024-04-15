@@ -9,11 +9,14 @@
                     <li class="nav-item">
                         <div class="dropdown">
                             <button id="menu-toggler" class="btn btn-sm d-flex align-items-center gap-2" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <div class="text-profile-pic bg-light-brown text-dark ">
+                                <!-- <div class="text-profile-pic bg-light-brown text-dark ">
                                     <div class="text fw-normal">
                                         <?= $admin['firstname'][0] .  $admin['lastname'][0] ?>
                                     </div>
-                                </div>
+                                </div> -->
+
+                                <?php $profile_pic_size = 'sm';
+                                require '../includes/user-profile-pic.php' ?>
                                 <div class="text-start">
                                     <p class="my-0 fw-semibold"><?= $admin['firstname'] . ' ' .  $admin['lastname'] ?></p>
                                     <p class="my-0">

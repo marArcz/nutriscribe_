@@ -128,22 +128,6 @@ require '../app/edit-profile.php';
 
     <script>
         $(function() {
-            // live update of time
-            const updateTime = () => {
-                let timeTxt = $("#text-time");
-                let timeInput = $("#input-time");
-                let date = new Date();
-
-                let H = date.getHours();
-                let h = H > 12 ? H - 12 : H;
-                h = h >= 10 ? h : '0' + h;
-                let m = date.getMinutes() >= 10 ? date.getMinutes() : '0' + date.getMinutes();
-
-                timeTxt.html(`${h}:${m} ${H >= 12 ? 'PM' : 'AM'}`)
-                timeInput.val(`${H >= 10 ? H : '0' + H}:${m}`)
-            }
-            setInterval(updateTime, 1000)
-
             $("#profile-pic-input").change(function(e) {
                 if (e.target.files.length > 0) {
                     let photo = e.target.files[0];

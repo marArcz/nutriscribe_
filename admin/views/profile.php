@@ -24,6 +24,15 @@
                     <h5 class="text-dark">Profile</h5>
                     <p>Update your photo and personal details</p>
                     <hr>
+                    <div class="edit-profile-photo-group">
+                        <div class="wrapper">
+                            <button type="button" data-bs-toggle="modal" data-bs-target="#photo-modal" class="camera-btn">
+                                <i class="bx bxs-camera"></i>
+                            </button>
+                            <?php $profile_pic_size = 'lg';
+                            require '../includes/user-profile-pic.php' ?>
+                        </div>
+                    </div>
                     <form action="" method="post">
                         <input type="hidden" name="id" value="<?= $admin['id'] ?>">
                         <div class="row mb-3">
@@ -74,7 +83,7 @@
                             </div>
                         </div>
                         <div class="row mb-5">
-                            <label for="confirm-password" class="col-sm-2 fw-normal col-form-label">Confirm new password</label>
+                            <label for="confirm-password" class="col-sm-2 fw-normal col form-label">Confirm new password</label>
                             <div class="col-sm-10">
                                 <input type="password" value="" class="form-control" name="confirm_pass" id="confirm-password">
                                 <?php if (isset($error['confirm_pass'])) : ?>
@@ -90,10 +99,19 @@
             </div>
         </div>
     </main>
+    <?php require_once '../includes/profile-modals.php' ?>
     <?php require_once '../includes/scripts.php' ?>
     <script>
-        $(function(){
-            
+        $(function() {
+            $("#profile-pic-input").change(function(e) {
+                if (e.target.files.length > 0) {
+                    let photo = e.target.files[0];
+                    console.log(photo)
+                    $('#text-profile-pic').addClass('d-none');
+                    $('#modal-profile-pic-div').removeClass('d-none')
+                    $('#modal-profile-pic-div').css("background-image", `url('${URL.createObjectURL(photo)}')`).data('image', URL.createObjectURL(photo))
+                }
+            })
         })
     </script>
 </body>

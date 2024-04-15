@@ -41,6 +41,37 @@
   margin-left: 15px;
 }
 
+.tab-list li.all .badge {
+  background: rgb(230, 230, 230) !important;
+  color: #4F4F4F !important;
+}
+.tab-list li.all.active a {
+  border-bottom: 3px solid rgb(83, 83, 83) !important;
+}
+.tab-list li.all.active a span {
+  font-weight: 400 !important;
+}
+.tab-list li.submitted .badge {
+  background: #DB9652 !important;
+  color: white !important;
+}
+.tab-list li.submitted.active a {
+  border-bottom: 3px solid #DB9652 !important;
+}
+.tab-list li.submitted.active a span {
+  font-weight: 400 !important;
+}
+.tab-list li.recieved .badge {
+  background: #309b56 !important;
+  color: white !important;
+}
+.tab-list li.recieved.active a {
+  border-bottom: 3px solid #309b56 !important;
+}
+.tab-list li.recieved.active a span {
+  font-weight: 400 !important;
+}
+
 .profile-pic-div,
 .image-div {
   width: 30px;
