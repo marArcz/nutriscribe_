@@ -10,9 +10,7 @@ jobs:
 
     - name: Use NPM INSTALL ACTION
       uses: bahmutov/npm-install@v1
-      with:
-        node-version: '20'
-    
+      
     - name: Use Composer
       uses: php-actions/composer@v6
 
