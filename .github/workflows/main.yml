@@ -8,8 +8,8 @@ jobs:
     - name: 🚚 Get latest code
       uses: actions/checkout@v4
 
-    - name: Use Node.js 16
-      uses: actions/setup-node@v3
+    - name: Use NPM INSTALL ACTION
+      uses: bahmutov/npm-install@v1
       with:
         node-version: '20'
     
