@@ -15,11 +15,12 @@ jobs:
     
     - name: Use Composer
       uses: php-actions/composer@v6
+
+    - name: 🔨 Install Composer Packages
+      run: composer install
       
     - name: 🔨 Install NPM Package
       run: npm install
-    - name: 🔨 Install Composer Packages
-      run: composer install
     
     
     - name: 📂 Sync files
