@@ -106,14 +106,18 @@ $page_query_param = $_GET;
                                             <p class="my-0 fs-6 text-secondary text-sm">
                                                 Created on <?= date('M d, Y', strtotime($row['created_at']))  ?>
                                             </p>
-                                            <div class="dropleft ms-auto">
-                                                <button class="btn btn-light btn-sm" type="button" data-toggle="dropdown" aria-expanded="false">
-                                                    <i class="bx bx-sm bx-dots-vertical"></i>
+                                            <div class=" dropstart ms-auto">
+                                                <button type="button" class="btn btn-light" data-bs-toggle="dropdown" aria-expanded="false">
+                                                    <i class="bx bx-dots-vertical bx-sm"></i>
                                                 </button>
-                                                <div class="dropdown-menu">
-                                                    <a class="dropdown-item fs-12" href="edit-submission-bin.php?id=<?= $row['id'] ?>">Edit</a>
-                                                    <a class="dropdown-item fs-12" href="../app/delete-submission-bin.php?id=<?= $row['id'] ?>">Delete</a>
-                                                </div>
+                                                <ul class="dropdown-menu">
+                                                    <li>
+                                                        <a href="edit_submission_bin.php?sb=<?= $row['id'] ?>" class="dropdown-item">Edit</a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="../app/delete_submission_bin.php?sb=<?= $row['id'] ?>" class="dropdown-item">Delete</a>
+                                                    </li>
+                                                </ul>
                                             </div>
                                         </div>
                                         <p class="text-secondary fw-light">
@@ -147,7 +151,7 @@ $page_query_param = $_GET;
                                             <a href="view-submissions.php?sb=<?= $row['id'] ?>" class=" btn btn-green-accent  ms-auto my-2 ">
                                                 View submissions
                                             </a>
-                                        <?php else: ?>
+                                        <?php else : ?>
                                             <a class=" btn btn-green-accent  ms-auto my-2 disabled text-light">
                                                 View submissions
                                             </a>
