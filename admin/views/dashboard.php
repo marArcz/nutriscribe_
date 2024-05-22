@@ -370,8 +370,11 @@
                     <div class="col-3">
                         <div class="bg-light border p-2 text-center">
                         <div id="profile-pic-div" class="image-div sm mx-auto" data-image="../../assets/images/${data.photo}"></div>
-                            <p class="my-1">
-                                <small>${data.name}</small>
+                            <p class="mb-0 mt-1 text-${data.online? 'green':'secondary'}">
+                                <small class='text-sm'>${data.online? 'Online':'Offline'} <i class=' bx bxs-circle'></i></small>
+                            </p>    
+                        <p class="my-1">
+                                <small class='fw-medium'>${data.name}</small>
                             </p>
                         </div>
                     </div>

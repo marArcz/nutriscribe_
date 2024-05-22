@@ -1,7 +1,7 @@
 <script src="../../node_modules/@popperjs/core/dist/umd/popper.min.js"></script>
 <script src="../../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
-<!-- <script src="../../node_modules/jquery/dist/jquery.min.js"></script> -->
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.1/dist/jquery.min.js"></script>
+<!-- <script src="../../node_modules/jquery/dist/jquery.min.js"></script> -->
 
 <script src="../../node_modules/sweetalert2/dist/sweetalert2.min.js"></script>
 <script src="../../node_modules/datatables.net/js/jquery.dataTables.js"></script>
@@ -34,11 +34,16 @@
 
         if ($("#sidebar").hasClass("closed")) {
             console.log('closed')
-            $.post("../app/add_session.php",{key:'closed_sidebar',value:true},(res) => {
+            $.post("../app/add_session.php", {
+                key: 'closed_sidebar',
+                value: true
+            }, (res) => {
                 console.log(res)
             });
-        }else{
-            $.post("../app/remove_session.php",{key:'closed_sidebar'},(res) => {
+        } else {
+            $.post("../app/remove_session.php", {
+                key: 'closed_sidebar'
+            }, (res) => {
                 console.log(res)
             });
         }
@@ -51,19 +56,28 @@
 
         if ($("#sidebar").hasClass("closed")) {
             console.log('closed')
-            $.post("../app/add_session.php",{key:'closed_sidebar',value:true},(res) => {
+            $.post("../app/add_session.php", {
+                key: 'closed_sidebar',
+                value: true
+            }, (res) => {
                 console.log(res)
             });
-        }else{
-            $.post("../app/remove_session.php",{key:'closed_sidebar'},(res) => {
+        } else {
+            $.post("../app/remove_session.php", {
+                key: 'closed_sidebar'
+            }, (res) => {
                 console.log(res)
             });
         }
     })
-
-    $(function(){
-        $(".image-div").each((i,elem)=>{
-            $(elem).css("background-image",`url('${$(elem).data('image')}')`)
+    const loadImageDivs = () => {
+        $(".image-div").each(function(i, elem) {
+            $(elem).css("background-image", `url('${$(elem).data('image')}')`)
         })
+    }
+
+    $(function() {
+      loadImageDivs();
     })
+
 </script>

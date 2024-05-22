@@ -26,7 +26,7 @@
             'BN Scholar Activities' => [
                 'link' => 'scholar_activities.php',
                 'key' => 'scholar_activities',
-                'icon'=>'bx bxs-note'
+                'icon'=>'bx bxs-file'
             ],
            
         ];

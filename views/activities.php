@@ -66,19 +66,11 @@ $rows = $query->fetchAll(PDO::FETCH_ASSOC);
                                 <input value="<?= $_GET['search'] ?? '' ?>" type="search" name="search" class="py-2 form-control rounded-4" placeholder="Search">
                             </form>
                         </div>
-                        <div class="">
-                            <a href="add_activity.php" class="btn-add rounded-pill shadow-sm btn btn-green-accent">
-                                <i class="icon bx bx-plus"></i>
-                                <span class="text fs-6">Add</span>
-                            </a>
-                        </div>
+
                     </div>
                 </div>
             </header>
             <div class="d-flex align-items-center justify-content-between mt-2">
-                <p class=" align-self-center text-secondary my-2 ">
-                    Page <?= $page ?> of <?= $total_pages ?>
-                </p>
                 <?php if (isset($_GET['search'])) : ?>
                     <div class="">
                         <a href="activities.php" class="btn bordered-btn-dark mt-3">
@@ -90,93 +82,113 @@ $rows = $query->fetchAll(PDO::FETCH_ASSOC);
                     </div>
                 <?php endif; ?>
             </div>
-            <div class="table-responsive-sm mt-2">
-                <table class="table table-hover mb-0 align-middle" id="activities-table">
-                    <thead class="table-light">
-                        <tr class="">
+            <!-- submission_bins -->
+            <div class="mt-3">
+                <p class="fw-medium fs-6">Submission bins</p>
+            </div>
+            <hr>
+            <?php $query = $pdo->query('SELECT * FROM submission_bins ORDER BY id DESC'); ?>
+            <div class="accordion" id="accordionExample">
+                <?php
+                // get 
+                while ($row = $query->fetch()) {
 
-                            <th class="fw-medium">Project / Task</th>
-                            <th class="fw-medium">Date</th>
-                            <th class="fw-medium">Location</th>
-                            <th class="fw-medium">Beneficiaries</th>
-                            <th class="fw-medium">Created At</th>
-                            <th class="fw-medium">Status</th>
-                            <th class="fw-medium">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php if (count($rows) > 0) : ?>
-                            <?php
-                            foreach ($rows as $key => $row) {
-                            ?>
-                                <tr>
-                                    <th><?= $row['title'] ?></th>
-                                    <th><?= date('M d, Y', strtotime($row['date'])) ?></th>
-                                    <th><?= $row['location'] ?></th>
-                                    <th><?= substring($row['beneficiaries']) ?></th>
-                                    <th><?= date('M d, Y', strtotime($row['created_at'])) ?></th>
-                                    <th>
-                                        <span class="badge fw-medium bg-<?= $row['status'] == 'SUBMITTED' ? 'dark-brown' : 'green-accent' ?>"><?= $row['status'] ?></span>
-                                    </th>
-                                    <th>
-                                        <div class="dropdown">
-                                            <a class="btn btn-light" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                                <i class='fs-3 text-dark-brown bx bx-dots-horizontal-rounded'></i>
-                                            </a>
-
-                                            <ul class="dropdown-menu">
-                                                <li><a class="dropdown-item" href="view_activity.php?id=<?= $row['id'] ?>">View</a></li>
-                                                <li>
-                                                    <?php if ($row['status'] == 'SUBMITTED') : ?>
-                                                        <a class="dropdown-item" href="edit_activity.php?id=<?= $row['id'] ?>">Edit</a>
-                                                    <?php else : ?>
-                                                        <a class="dropdown-item disabled" title="Cannot be edited anymore." href="edit_activity.php">Edit</a>
-                                                    <?php endif; ?>
-                                                </li>
-                                                <li>
-                                                    <?php if ($row['status'] == 'SUBMITTED') : ?>
-                                                        <a class="dropdown-item" href="delete_activity.php?id=<?= $row['id'] ?>">Delete</a>
-                                                    <?php else : ?>
-                                                        <a class="dropdown-item disabled" href="delete_activity.php?id=<?= $row['id'] ?>">Delete</a>
-                                                    <?php endif; ?>
-                                                </li>
-                                            </ul>
+                ?>
+                    <div class="card active submission-bin-card border-0 bg-transparent mt-1 mb-2">
+                        <div class="card-header py-2 px-3" id="heading-<?= $row['id'] ?>">
+                            <div class="d-flex align-items-center gap-2 my-2">
+                                <button class=" text-dark btn flex-1 flex-fill border-0 text-start" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-item-<?= $row['id'] ?>" aria-expanded="true" aria-controls="collapseOne">
+                                    <div class="row align-items-center ">
+                                        <div class="col-auto">
+                                            <div class="circle-icon bg-green-accent">
+                                                <i class="bx bx-box text-secondary"></i>
+                                            </div>
                                         </div>
-                                    </th>
-                                </tr>
-                            <?php
-                            }
-                            ?>
-                        <?php else : ?>
-                            <tr>
-                                <th colspan="8">
-                                    <p class="text-center my-0">Nothing to show.</p>
-                                </th>
-                            </tr>
-                        <?php endif ?>
-                    </tbody>
-                </table>
-                <div class="table-pagination bg-light py-2">
-                    <div class="d-flex align-items-center">
-                        <div class="ps-3">
+                                        <div class="ms-1 col">
+                                            <div class="row align-items-center">
+                                                <div class="col-md-auto col">
+                                                    <p class=" my-0 fs-5 text-secondary"><?= $row['title'] ?></p>
+                                                </div>
+                                                <div class="col-auto ms-auto">
+                                                    <div class="">
+                                                        <?php
+                                                        if ($row['deadline']) :
+                                                            $date = date('M d Y', strtotime($row['deadline']));
+                                                            $time = date('h:i:A', strtotime($row['deadline']));
+                                                            $deadline = 'Due ' . $date . ', ' . $time;
+                                                        ?>
+                                                            <p class="my-0 text-secondary deadline-text me-3"><?= $deadline ?></p>
+                                                        <?php else : ?>
+                                                            <p class="my-0 text-secondary deadline-text me-3">No due date</p>
+                                                        <?php endif ?>
+                                                    </div>
 
-                            <p class=" align-self-center text-secondary my-2 ">
-                                Showing <?= $offset + 1 ?> to <?= $offset + count($rows) ?> of <?= $total_rows ?> entries.
-                            </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </button>
+                            </div>
                         </div>
-                        <div class="ms-auto d-flex gap-3 align-items-center">
-                            <a href="?page=<?= $page - 1 ?>" class="<?= ($page - 1) <= 0 ? 'disabled border-0' : '' ?> d-flex align-items-center btn text-btn-green-accent fw-medium">
-                                <i class="bx bx-skip-previous"></i>
-                                Prev
-                            </a>
-                            <a href="?page=<?= $page + 1 ?>" class="<?= ($page + 1) > $total_pages ? 'disabled border-0' : '' ?> d-flex align-items-center btn text-btn-green-accent fw-medium">
-                                Next
-                                <i class="bx bx-skip-next"></i>
-                            </a>
+                        <div id="collapse-item-<?= $row['id'] ?>" class="collapse bg-white" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                            <div class="card-body py-3 bg-white ">
+                                <div class="d-flex">
+                                    <p class="my-0 fs-6 text-secondary text-sm">
+                                        Created on <?= date('M d, Y', strtotime($row['created_at']))  ?>
+                                    </p>
+                                    <div class="dropleft ms-auto">
+                                        <button class="btn btn-light btn-sm" type="button" data-toggle="dropdown" aria-expanded="false">
+                                            <i class="bx bx-sm bx-dots-vertical"></i>
+                                        </button>
+                                        <div class="dropdown-menu">
+                                            <a class="dropdown-item fs-12" href="edit-submission-bin.php?id=<?= $row['id'] ?>">Edit</a>
+                                            <a class="dropdown-item fs-12" href="../app/delete-submission-bin.php?id=<?= $row['id'] ?>">Delete</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <p class="text-secondary fw-light">
+                                    <?= $row['instructions'] != null && $row['instructions'] != '' ? $row['instructions'] : 'No instructions.' ?>
+                                </p>
+
+                                <div class=" mt-5">
+                                    <?php
+                                    // get submission count 
+                                    $q = $pdo->prepare('SELECT id FROM submissions WHERE submission_bin_id = ?');
+                                    $q->execute([$row['id']]);
+                                    $reports_count = $q->rowCount();
+                                    $q = $pdo->prepare('SELECT id FROM scholar_accounts');
+                                    $q->execute();
+                                    $scholars_count = $q->rowCount();
+                                    ?>
+                                    <div class="d-flex justify-content-end align-items-center">
+                                        <div class=" text-center border-start text-secondary px-3">
+                                            <p class=" fs-4"><?= $reports_count ?></p>
+                                            <p class="mb-0">Submitted</p>
+                                        </div>
+                                        <div class=" text-center border-start text-secondary px-3">
+                                            <p class=" fs-4"><?= $scholars_count ?></p>
+                                            <p class="mb-0">BN Scholars</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer d-flex align-items-center bg-white">
+                                <a href="submission_bin.php?sb=<?= $row['id'] ?>" class=" btn btn-light my-2">
+                                    Open submission bin
+                                </a>
+                            </div>
                         </div>
                     </div>
-                </div>
+                <?php
+                }
+                ?>
             </div>
+            <?php if ($query->rowCount() == 0) : ?>
+                <div class="text-center">
+                    <img src="../assets/images/empty-box (3).png" class="img-fluid mb-3" width="100" alt="">
+                </div>
+                <p class=" text-center">There are no submission bins to show.</p>
+            <?php endif ?>
         </div>
     </main>
     <?php require '../includes/footer.php' ?>

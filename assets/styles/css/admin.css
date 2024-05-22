@@ -190,6 +190,11 @@ main .content {
   height: 120px !important;
   font-size: 1.7rem !important;
 }
+.text-profile-pic.md {
+  width: 60px;
+  height: 60px;
+  font-size: 1.3rem;
+}
 
 .table .table-header {
   background: #33425E !important;
@@ -301,4 +306,9 @@ main .content {
 .table-item.dropdown {
   width: -moz-fit-content !important;
   width: fit-content !important;
+}
+
+.submission-card .file-icon img {
+  width: 40px;
+  height: 40px;
 }/*# sourceMappingURL=admin.css.map */

@@ -28,20 +28,27 @@ foreach ($time_ins as $key => $time_in) {
 
     $scholar['time_out'] = $time_out ? date('h:i A', strtotime($time_out['time'])) : null;
 
+    // get scholar status
+    $query = $pdo->prepare("SELECT last_activity FROM scholar_accounts WHERE id = ?");
+    $query->execute([$time_in['scholar_account_id']]);
+
+    $record = $query->fetch();
+    $last_activity = $record['last_activity'];
+
+    $query = $pdo->query("SELECT NOW()");
+    $now = $query->fetch()[0];
+    $currentTimestamp = date("Y-m-d H:i:s");
+
+    $datetime1 = new DateTime($last_activity); // start time
+    $datetime2 = new DateTime($now); // end time
+
+    $interval = $datetime1->diff($datetime2);
+
+    $scholar['online'] = $interval->format('%i') < 2;
+
+
     array_push($scholars, $scholar);
 }
-
-// get scholars with no time in yet
-// $query = $pdo->prepare("SELECT * FROM scholar_infos WHERE id NOT IN (SELECT scholar_id FROM attendances WHERE DATE(created_at) = DATE(NOW()) AND type = 'in')");
-// $query->execute();
-// while ($row = $query->fetch()) {
-//     $scholar['name'] = $row['firstname'] . ' ' . $row['lastname'];
-//     $scholar['scholar_id'] = $row['id'];
-//     $scholar['photo'] = $row['photo'];
-//     $scholar['time_in'] = null;
-//     $scholar['time_out'] = null;
-//     array_push($scholars, $scholar);
-// }
 
 
 echo json_encode($scholars);

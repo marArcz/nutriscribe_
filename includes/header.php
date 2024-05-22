@@ -8,4 +8,5 @@
 <link rel="stylesheet" href="../assets/styles/css/app.css">
 <link rel="stylesheet" href="../assets/styles/css/typography.css">
 <link rel="stylesheet" href="../assets/styles/css/custom.css">
+<link rel="stylesheet" href="../assets/styles/css/global.css">
 <link rel="shortcut icon" href="../assets/images/logo.png" type="image/x-icon">

@@ -12,3 +12,4 @@
 <link rel="stylesheet" href="../../node_modules/sweetalert2/dist/sweetalert2.min.css">
 <link rel="shortcut icon" href="../../assets/images/logo.png" type="image/x-icon">
 <link rel="stylesheet" href="../../node_modules/datatables.net-dt/css/jquery.dataTables.css">
+<link rel="stylesheet" href="../../assets/styles/css/global.css">

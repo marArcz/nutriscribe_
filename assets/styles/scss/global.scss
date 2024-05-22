@@ -1,0 +1,82 @@
+@import './colors';
+
+.submission-bin-card {
+    &.active {
+        .icon {
+            background: $green-accent;
+        }
+    }
+    .icon {
+        width: 50px;
+        height: 50px;
+        background: rgb(163, 163, 163);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 50%;
+    
+        i {
+            color: white !important;
+            margin: 0 !important;
+            font-size: 1.7rem;
+        }
+    
+    }
+    .deadline-text{
+        font-size: 0.9rem !important;
+    }
+
+    .title {
+        font-size: 1.1rem !important;
+    }
+}
+
+.circle-icon {
+    width: 50px;
+    height: 50px;
+    background: rgb(163, 163, 163);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+
+    i {
+        color: white !important;
+        margin: 0 !important;
+        font-size: 1.7rem;
+    }
+
+}
+
+.submission-attachment{
+    border: 1px solid rgb(210, 210, 210);
+    padding: 10px;
+    border-radius: 5px;
+    .file-icon{
+        img{
+            width: 45px;
+            height: 45px;
+        }
+    }
+
+    .btn-remove-file{
+        width: 30px;
+        height: 30px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 50%;
+        border: none;
+        background: transparent;
+        transition: 200ms;
+        &:hover{
+            background: rgba(220, 220, 220,0.5);
+        }
+    }
+}
+
+.comments-area{
+    max-height: 210px;
+    overflow-y: auto;
+    scroll-behavior: smooth !important;
+}

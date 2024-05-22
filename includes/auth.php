@@ -4,7 +4,6 @@
 
 
     date_default_timezone_set('Asia/Manila');
-
     $user = Session::getUser($pdo);
 
     if(!$user){
@@ -20,4 +19,9 @@
 
         return $txt;
     }
+
+    // update user's last activity
+    $query = $pdo->prepare("UPDATE scholar_accounts SET last_activity = NOW() WHERE id = ?");
+    $query->execute([$user['id']]);
+    
 ?>
