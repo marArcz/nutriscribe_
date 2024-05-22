@@ -1,7 +1,7 @@
 <?php 
 require_once '../../conn/conn.php';
 
-$query = $pdo->prepare("SELECT COUNT(id) FROM scholar_activities WHERE YEAR(created_at) = ? AND MONTH(created_at) = ?");
+$query = $pdo->prepare("SELECT COUNT(id) FROM submissions WHERE YEAR(created_at) = ? AND MONTH(created_at) = ?");
 $year = $_POST['year'];
 
 $data = [];

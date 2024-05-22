@@ -167,7 +167,7 @@
                         </div>
                     </div>
                     <!-- activities -->
-                    <div class="d-flex align-items-center mb-2 mt-4">
+                    <!-- <div class="d-flex align-items-center mb-2 mt-4">
                         <span class="bullet bg-gray2 me-2 rounded-circle"></span>
                         <p class="text-gray2 fw-medium my-0">
                             <small>This Week's Activities</small>
@@ -209,7 +209,7 @@
                                 <?php endif ?>
                             </tbody>
                         </table>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </div>
