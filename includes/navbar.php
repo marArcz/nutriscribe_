@@ -17,14 +17,10 @@
                     <li class="nav-item">
                         <div class="dropdown">
                             <button id="menu-toggler" class="btn btn-sm d-flex align-items-center gap-2" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <!-- <div class="text-profile-pic bg-light text-dark ">
-                                    <div class="text fw-normal">
-                                        <?= $user['firstname'][0] .  $user['lastname'][0] ?>
-                                    </div>
-                                </div> -->
+                                <?= $user['firstname'][0] .  $user['lastname'][0] ?>
                                 <?php
-                                    $profile_pic_size='sm';
-                                    require_once '../includes/user-profile-pic.php'
+                                $profile_pic_size = 'sm';
+                                require_once '../includes/user-profile-pic.php'
                                 ?>
                                 <div class="text-start text-light d-none d-md-block">
                                     <p class="my-0 fw-semibold"><?= $user['firstname'] . ' ' .  $user['lastname'] ?></p>

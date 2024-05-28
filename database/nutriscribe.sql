@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.1
+-- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 14, 2024 at 03:43 PM
--- Server version: 10.4.32-MariaDB
--- PHP Version: 8.2.12
+-- Generation Time: May 27, 2024 at 02:19 PM
+-- Server version: 10.4.25-MariaDB
+-- PHP Version: 8.1.10
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -38,14 +38,14 @@ CREATE TABLE `admins` (
   `email_verified_at` datetime DEFAULT NULL,
   `verification_code` varchar(255) DEFAULT NULL,
   `verification_code_created_at` datetime DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `admins`
 --
 
 INSERT INTO `admins` (`id`, `firstname`, `lastname`, `username`, `password`, `image`, `email`, `email_verified_at`, `verification_code`, `verification_code_created_at`) VALUES
-(1, 'Admin', 'User', 'admin', '$2y$10$neLu7IFnbj9dFK8NCC9lQOrU.85W0fxbe9F5irT7l5cFOsvfEaYQG', '', 'admin@email.com', '2023-10-26 14:59:47', '34B26D', '2023-10-26 13:43:27');
+(2, 'Admin', 'User', 'admin', '$2a$12$atGU/79ojYXS/rXmhGPAHefmnwCUsb9yyByYBMW1j2RkE05oXBgIa', '', 'admin@email.com', '2024-05-22 21:04:49', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -59,7 +59,38 @@ CREATE TABLE `attendances` (
   `type` enum('in','out') NOT NULL,
   `time` timestamp NOT NULL DEFAULT current_timestamp(),
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `comments`
+--
+
+CREATE TABLE `comments` (
+  `id` int(11) NOT NULL,
+  `scholar_id` int(11) DEFAULT NULL,
+  `admin_id` int(11) DEFAULT NULL,
+  `message` varchar(255) NOT NULL,
+  `submission_bin_id` int(11) NOT NULL,
+  `is_admin` tinyint(1) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `notifications`
+--
+
+CREATE TABLE `notifications` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `type` varchar(50) NOT NULL COMMENT 'message, alert',
+  `url` varchar(255) DEFAULT NULL,
+  `is_read` tinyint(1) NOT NULL DEFAULT 0,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -74,15 +105,9 @@ CREATE TABLE `scholar_accounts` (
   `disabled` tinyint(1) NOT NULL DEFAULT 0,
   `change_password_on_login` tinyint(1) NOT NULL DEFAULT 1,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `scholar_accounts`
---
-
-INSERT INTO `scholar_accounts` (`id`, `username`, `password`, `disabled`, `change_password_on_login`, `created_at`, `updated_at`) VALUES
-(11, 'mzafe', '$2y$10$c2whosqZVlcuX.jGKH/PceoSXCRqR.Mpq9SxeigtRlCj7gau3esDq', 0, 1, '2024-04-14 10:26:02', NULL);
+  `updated_at` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp(),
+  `last_activity` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -101,7 +126,7 @@ CREATE TABLE `scholar_activities` (
   `scholar_id` int(11) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -122,14 +147,52 @@ CREATE TABLE `scholar_infos` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp(),
   `photo` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
 
 --
--- Dumping data for table `scholar_infos`
+-- Table structure for table `submissions`
 --
 
-INSERT INTO `scholar_infos` (`id`, `firstname`, `middlename`, `lastname`, `email`, `address`, `birthday`, `phone`, `scholar_account_id`, `created_at`, `updated_at`, `photo`) VALUES
-(10, 'Marlo', 'Arcilla', 'Zafe', 'marlozafe13@gmail.com', 'Gogon Centro Virac, Catanduanes', '2024-04-14 10:26:02', '9979970920', 11, '2024-04-14 10:26:02', '2024-04-14 10:26:41', 'profile-pic.jpg');
+CREATE TABLE `submissions` (
+  `id` int(11) NOT NULL,
+  `scholar_id` int(11) NOT NULL,
+  `submission_bin_id` int(11) NOT NULL,
+  `created_at` timestamp NULL DEFAULT current_timestamp(),
+  `viewed` tinyint(1) NOT NULL DEFAULT 0,
+  `submitted` tinyint(1) NOT NULL DEFAULT 0,
+  `status` varchar(50) NOT NULL DEFAULT 'Submitted',
+  `submitted_on` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `submission_attachments`
+--
+
+CREATE TABLE `submission_attachments` (
+  `id` int(11) NOT NULL,
+  `uri` varchar(255) NOT NULL,
+  `submission_id` int(11) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `submission_bins`
+--
+
+CREATE TABLE `submission_bins` (
+  `id` int(11) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `instructions` varchar(500) DEFAULT NULL,
+  `deadline` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `is_archived` tinyint(1) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Indexes for dumped tables
@@ -147,6 +210,21 @@ ALTER TABLE `admins`
 ALTER TABLE `attendances`
   ADD PRIMARY KEY (`id`),
   ADD KEY `scholar_id` (`scholar_id`);
+
+--
+-- Indexes for table `comments`
+--
+ALTER TABLE `comments`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `admin_id` (`admin_id`),
+  ADD KEY `scholar_id` (`scholar_id`);
+
+--
+-- Indexes for table `notifications`
+--
+ALTER TABLE `notifications`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `user_id` (`user_id`);
 
 --
 -- Indexes for table `scholar_accounts`
@@ -170,6 +248,27 @@ ALTER TABLE `scholar_infos`
   ADD KEY `scholar_account_id` (`scholar_account_id`);
 
 --
+-- Indexes for table `submissions`
+--
+ALTER TABLE `submissions`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `scholar_id` (`scholar_id`),
+  ADD KEY `submission_bin_id` (`submission_bin_id`);
+
+--
+-- Indexes for table `submission_attachments`
+--
+ALTER TABLE `submission_attachments`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `submission_id` (`submission_id`);
+
+--
+-- Indexes for table `submission_bins`
+--
+ALTER TABLE `submission_bins`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -177,19 +276,31 @@ ALTER TABLE `scholar_infos`
 -- AUTO_INCREMENT for table `admins`
 --
 ALTER TABLE `admins`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `attendances`
 --
 ALTER TABLE `attendances`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+
+--
+-- AUTO_INCREMENT for table `comments`
+--
+ALTER TABLE `comments`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+
+--
+-- AUTO_INCREMENT for table `notifications`
+--
+ALTER TABLE `notifications`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `scholar_accounts`
 --
 ALTER TABLE `scholar_accounts`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `scholar_activities`
@@ -201,7 +312,25 @@ ALTER TABLE `scholar_activities`
 -- AUTO_INCREMENT for table `scholar_infos`
 --
 ALTER TABLE `scholar_infos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+
+--
+-- AUTO_INCREMENT for table `submissions`
+--
+ALTER TABLE `submissions`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `submission_attachments`
+--
+ALTER TABLE `submission_attachments`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+
+--
+-- AUTO_INCREMENT for table `submission_bins`
+--
+ALTER TABLE `submission_bins`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- Constraints for dumped tables
@@ -214,6 +343,19 @@ ALTER TABLE `attendances`
   ADD CONSTRAINT `attendances_ibfk_1` FOREIGN KEY (`scholar_id`) REFERENCES `scholar_infos` (`id`) ON DELETE CASCADE;
 
 --
+-- Constraints for table `comments`
+--
+ALTER TABLE `comments`
+  ADD CONSTRAINT `comments_ibfk_1` FOREIGN KEY (`admin_id`) REFERENCES `admins` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `comments_ibfk_2` FOREIGN KEY (`scholar_id`) REFERENCES `scholar_accounts` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `notifications`
+--
+ALTER TABLE `notifications`
+  ADD CONSTRAINT `notifications_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `scholar_accounts` (`id`) ON DELETE CASCADE;
+
+--
 -- Constraints for table `scholar_activities`
 --
 ALTER TABLE `scholar_activities`
@@ -224,6 +366,19 @@ ALTER TABLE `scholar_activities`
 --
 ALTER TABLE `scholar_infos`
   ADD CONSTRAINT `scholar_infos_ibfk_1` FOREIGN KEY (`scholar_account_id`) REFERENCES `scholar_accounts` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `submissions`
+--
+ALTER TABLE `submissions`
+  ADD CONSTRAINT `submissions_ibfk_1` FOREIGN KEY (`scholar_id`) REFERENCES `scholar_accounts` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `submissions_ibfk_2` FOREIGN KEY (`submission_bin_id`) REFERENCES `submission_bins` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `submission_attachments`
+--
+ALTER TABLE `submission_attachments`
+  ADD CONSTRAINT `submission_attachments_ibfk_1` FOREIGN KEY (`submission_id`) REFERENCES `submissions` (`id`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
